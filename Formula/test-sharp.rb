@@ -15,7 +15,6 @@ class TestSharp < Formula
 
     odie "Could not determine .NET RID from `dotnet --info`" if rid.blank?
 
-
     # Adjust path if your csproj lives elsewhere
     system "dotnet", "publish", "test-sharp.csproj",
             "-c", "Release",
@@ -26,7 +25,6 @@ class TestSharp < Formula
             "-o", buildpath/"publish"
 
     bin.install buildpath/"publish/test-sharp"
-
   end
 
   test do
