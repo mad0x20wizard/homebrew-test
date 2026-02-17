@@ -11,7 +11,6 @@ class TestSharp < Formula
   end
 
   depends_on "dotnet" => [:build]
-  depends_on "brotli"
 
   def install
     dotnet_info = Utils.safe_popen_read("dotnet", "--info")
