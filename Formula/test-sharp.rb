@@ -8,12 +8,16 @@ class TestSharp < Formula
   depends_on "dotnet"
 
   def install
-    rid = Utils.safe_popen_read("dotnet", "--info")
-                .lines
-                .find { |l| l.start_with?(" RID:") || l.start_with?("RID:") }
-                &.split(":", 2)&.last&.strip
+    dotnet_info = Utils.safe_popen_read("dotnet", "--info")
 
-    odie "Could not determine .NET RID from `dotnet --info`" if rid.blank?
+    rid_line = dotnet_info.lines.find do |l|
+        l.start_with?(" RID:", "RID:")
+    end
+
+    odie "Could not determine .NET RID from `dotnet --info`" if rid_line.nil?
+
+    rid = rid_line.split(":", 2).last&.strip
+    odie "Could not parse RID from `dotnet --info`" if rid.nil? || rid.empty?
 
     # Adjust path if your csproj lives elsewhere
     system "dotnet", "publish", "test-sharp.csproj",
