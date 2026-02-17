@@ -10,7 +10,6 @@ class TestSharp < Formula
     sha256 cellar: :any, arm64_sequoia: "bd44f4bbad137d157ec137be2b0da8e239acdb5d9a1078f1606dd00478ce1ea1"
   end
 
-#   depends_on "brotli"
   depends_on "dotnet" => :build
 
   def install
