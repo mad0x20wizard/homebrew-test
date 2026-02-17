@@ -5,8 +5,8 @@ class TestSharp < Formula
   sha256 "a14bf5f77efd231f79632e69b34f2f690a67e826e0176465c2510db623640835"
   license "MIT"
 
-  depends_on "dotnet"
   depends_on "brotli"
+  depends_on "dotnet"
 
   def install
     dotnet_info = Utils.safe_popen_read("dotnet", "--info")
