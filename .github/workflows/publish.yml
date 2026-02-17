@@ -8,14 +8,19 @@ on:
 jobs:
   pr-pull:
     if: contains(github.event.pull_request.labels.*.name, 'pr-pull')
-    runs-on: ubuntu-22.04
+
+    runs-on: ubuntu-24.04
+
     permissions:
       actions: read
-      checks: read
       contents: write
-      issues: read
       packages: write
       pull-requests: write
+
+      # really needed?
+      issues: read
+      checks: read
+      
     steps:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@main
