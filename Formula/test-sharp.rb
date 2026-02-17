@@ -17,7 +17,7 @@ class TestSharp < Formula
     odie "Could not determine .NET RID from `dotnet --info`" if rid_line.nil?
 
     rid = rid_line.split(":", 2).last&.strip
-    odie "Could not parse RID from `dotnet --info`" if rid.nil? || rid.empty?
+    odie "Could not parse RID from `dotnet --info`" if rid.blank?
 
     # Adjust path if your csproj lives elsewhere
     system "dotnet", "publish", "test-sharp.csproj",
