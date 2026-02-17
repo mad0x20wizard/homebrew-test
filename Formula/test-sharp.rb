@@ -1,25 +1,32 @@
 class TestSharp < Formula
   desc "Hello World .NET sample"
   homepage "https://github.com/mad0x20wizard/test-sharp"
-  url "https://github.com/mad0x20wizard/test-sharp/archive/refs/tags/v0.0.0.tar.gz"
-  sha256 "REPLACE_ME"
+  url "https://github.com/mad0x20wizard/test-sharp/archive/refs/tags/v.1.0.4.tar.gz"
+  sha256 "a14bf5f77efd231f79632e69b34f2f690a67e826e0176465c2510db623640835"
   license "MIT"
 
   depends_on "dotnet"
 
   def install
+    rid = Utils.safe_popen_read("dotnet", "--info")
+                .lines
+                .find { |l| l.start_with?(" RID:") || l.start_with?("RID:") }
+                &.split(":", 2)&.last&.strip
+
+    odie "Could not determine .NET RID from `dotnet --info`" if rid.blank?
+
+
     # Adjust path if your csproj lives elsewhere
-    system "dotnet", "publish", "TestSharp/TestSharp.csproj",
-      "-c", "Release",
-      "--self-contained", "false",
-      "-o", "publish"
+    system "dotnet", "publish", "test-sharp.csproj",
+            "-c", "Release",
+            "-r", rid,
+            "--self-contained", "true",
+            "-p:PublishSingleFile=true",
+            "-p:IncludeNativeLibrariesForSelfExtract=true",
+            "-o", buildpath/"publish"
 
-    libexec.install Dir["publish/*"]
+    bin.install buildpath/"publish/test-sharp"
 
-    (bin/"test-sharp").write <<~EOS
-      #!/bin/bash
-      exec "#{Formula["dotnet"].opt_bin}/dotnet" "#{libexec}/TestSharp.dll" "$@"
-    EOS
   end
 
   test do
