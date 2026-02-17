@@ -6,6 +6,7 @@ class TestSharp < Formula
   license "MIT"
 
   depends_on "dotnet"
+  depends_on "brotli"
 
   def install
     dotnet_info = Utils.safe_popen_read("dotnet", "--info")
@@ -34,6 +35,6 @@ class TestSharp < Formula
   test do
     # Update to whatever your app prints/does
     output = shell_output("#{bin}/test-sharp").strip
-    assert_match "Hello, World!", output
+    assert_match "Hello, Worldd!", output
   end
 end
