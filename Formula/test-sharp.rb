@@ -5,6 +5,11 @@ class TestSharp < Formula
   sha256 "50540d292447b90079b347545e21fc1ad64e7331e5d18d2de53ad56b8f261da2"
   license "MIT"
 
+  bottle do
+    root_url "https://ghcr.io/v2/mad0x20wizard/test"
+    sha256 cellar: :any, arm64_sequoia: "bd44f4bbad137d157ec137be2b0da8e239acdb5d9a1078f1606dd00478ce1ea1"
+  end
+
   depends_on "brotli"
   depends_on "dotnet"
 
