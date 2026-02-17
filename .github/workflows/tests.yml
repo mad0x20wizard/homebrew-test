@@ -9,15 +9,19 @@ on:
 jobs:
   test-bot:
     strategy:
+      fail-fast: false
       matrix:
-        os: [ ubuntu-22.04, macos-15-intel, macos-26 ]
+        os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-15-intel, macos-15 ]
+
     runs-on: ${{ matrix.os }}
+
     permissions:
       actions: read
       checks: read
       contents: read
       packages: read
       pull-requests: read
+
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
