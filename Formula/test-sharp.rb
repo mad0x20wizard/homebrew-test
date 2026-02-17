@@ -7,7 +7,7 @@ class TestSharp < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/mad0x20wizard/test"
-    sha256 cellar: :any, arm64_sequoia: "bd44f4bbad137d157ec137be2b0da8e239acdb5d9a1078f1606dd00478ce1ea1"
+    sha256 cellar: :any, arm64_sequoia: "beaf7c1f552d19b215fe6c9017e64c934c2b293c24279c58bb03492efa130d34"
   end
 
   depends_on "dotnet" => [:build]
