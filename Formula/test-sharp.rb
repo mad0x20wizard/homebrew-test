@@ -13,6 +13,7 @@ class TestSharp < Formula
   depends_on "dotnet" => [:build]
   depends_on "brotli"
   depends_on "icu4c@78"
+  depends_on "libunwind"
   depends_on "openssl@3"
 
   def install
