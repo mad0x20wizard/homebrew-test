@@ -44,4 +44,6 @@ jobs:
           branch: main
 
       - name: Delete branch
-        run: git push --delete origin "${{ github.event.pull_request.head.ref }}"
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: git push --delete origin "$BRANCH"
