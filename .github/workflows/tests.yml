@@ -29,6 +29,14 @@ jobs:
 
     steps:
 
+      - name: Set up Homebrew (minimal)
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ github.token }}
+        env:
+          HOMEBREW_NO_UPDATE_REPORT_NEW: 1
+          HOMEBREW_NO_INSTALL_FROM_API: 1
+
       - name: Pre-build
         uses: Homebrew/actions/pre-build@main
         with:
