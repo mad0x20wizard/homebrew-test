@@ -12,8 +12,9 @@ class TestSharp < Formula
   end
 
   depends_on "dotnet" => [:build]
-  depends_on "brotli"
   
+  depends_on "brotli"
+
   on_linux do
     depends_on "icu4c@78"
     depends_on "libunwind"
