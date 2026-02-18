@@ -15,6 +15,7 @@ class TestSharp < Formula
   depends_on "icu4c@78"
   depends_on "libunwind"
   depends_on "openssl@3"
+  depends_on "zlib-ng-compat"
 
   def install
     dotnet_info = Utils.safe_popen_read("dotnet", "--info")
