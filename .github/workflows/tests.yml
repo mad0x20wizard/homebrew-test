@@ -29,13 +29,15 @@ jobs:
 
     steps:
 
+      - uses: actions/checkout@v4
+
       - name: Set up Homebrew (minimal)
         uses: Homebrew/actions/setup-homebrew@main
         with:
           token: ${{ github.token }}
-        env:
-          HOMEBREW_NO_UPDATE_REPORT_NEW: 1
-          HOMEBREW_NO_INSTALL_FROM_API: 1
+
+      - name: Tap custom tap
+        run: brew tap mad0x20wizard/test https://github.com/mad0x20wizard/test
 
       - name: Pre-build
         uses: Homebrew/actions/pre-build@main
