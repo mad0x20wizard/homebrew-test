@@ -1,4 +1,4 @@
-name: brew test-bot
+name: Build Homebrew bottles
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ jobs:
         os:
           # - macos-15            # Apple Silicon
           # - macos-15-intel      # Intel
-          - ubuntu-24.04-arm64  # Linux arm64
+          - ubuntu-24.04-arm    # Linux arm64
           - ubuntu-24.04        # Linux x86_64
 
     runs-on: ${{ matrix.os }}
@@ -48,16 +48,15 @@ jobs:
           name: bottles_${{ matrix.os }}
           path: '*.bottle.*'
 
-  label-pr:
-    name: Label PR for publishing bottles
+  add-pr-pull:
     needs: test-bot
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-slim
 
     permissions:
       pull-requests: write
 
     steps:
-      - name: Add pr-pull label
+      - name: Add 'pr-pull' label
         uses: actions/github-script@v7
         with:
           script: |
