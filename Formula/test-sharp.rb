@@ -12,7 +12,6 @@ class TestSharp < Formula
   end
 
   depends_on "dotnet" => [:build]
-  
   depends_on "brotli"
 
   on_linux do
