@@ -1,8 +1,8 @@
 class TestSharp < Formula
   desc "Hello World .NET sample"
   homepage "https://github.com/mad0x20wizard/test-sharp"
-  url "https://github.com/mad0x20wizard/test-sharp/archive/refs/tags/v1.4.8.tar.gz"
-  sha256 "d4ac22313d8b450eb32c3b42b4ca3898f5cbebf1d2098a3e689904b9f4bee0d6"
+  url "https://github.com/mad0x20wizard/test-sharp/archive/refs/tags/v1.4.9.tar.gz"
+  sha256 "ba429f4af6358a7d9b4b24b99865834e2ccd5b06d986b64c1d71bec4bbd6965a"
   license "MIT"
 
   bottle do
