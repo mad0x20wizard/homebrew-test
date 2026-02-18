@@ -28,26 +28,37 @@ jobs:
       BOTTLES_DIR: ${{ github.workspace }}/bottles
 
     steps:
-      
-      - name: Pre-build
-        uses: Homebrew/actions/pre-build@main
-        with:
-          bottles-directory: ${{ env.BOTTLES_DIR }}
 
-      - working-directory: ${{ env.BOTTLES_DIR }}
-        run: |
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Cache Homebrew Bundler RubyGems
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+      #     key: ${{ matrix.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+      #     restore-keys: ${{ matrix.os }}-rubygems-
+
+      - run: brew test-bot --only-cleanup-before
+      - run: brew test-bot --only-setup
+      - run: brew test-bot --only-tap-syntax
+
+      - run: |
           brew test-bot \
             --only-formulae \
             --skip-online-checks \
             --skip-dependents \
             --root-url=https://ghcr.io/v2/mad0x20wizard/test
 
-      - name: Post-build
-        uses: Homebrew/actions/post-build@main
+      - name: Upload bottles as artifact
+        uses: actions/upload-artifact@v4
         with:
-          runner: ${{ matrix.os }}
-          bottles-directory: ${{ env.BOTTLES_DIR }}
-          logs-directory: ${{ env.BOTTLES_DIR }}/logs
+          if-no-files-found: error
+          name: bottles_${{ matrix.os }}
+          path: '*.bottle.*'
 
   label-pr:
     name: Label PR for publishing bottles
