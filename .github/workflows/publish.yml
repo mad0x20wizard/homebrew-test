@@ -38,10 +38,10 @@ jobs:
           PULL_REQUEST: ${{ github.event.pull_request.number }}
 
         run: |
-          brew pr-pull
-            --debug
-            --tap="$GITHUB_REPOSITORY"
-            --workflows="build.yml"
+          brew pr-pull \
+            --debug \
+            --tap="$GITHUB_REPOSITORY" \
+            --workflows="build.yml" \
             "$PULL_REQUEST"
 
       - name: Push commits
