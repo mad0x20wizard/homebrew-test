@@ -1,18 +1,15 @@
 name: brew test-bot
 
 on:
-  # push:
-  #   branches:
-  #     - main
   pull_request:
 
 jobs:
   test-bot:
     strategy:
-      fail-fast: true
       matrix:
         # os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-15-intel, macos-15 ]
-        os: [ macos-15 ]
+        # os: [ macos-15 ]
+        os: [ ubuntu-24.04 ]
 
     runs-on: ${{ matrix.os }}
 
@@ -38,26 +35,24 @@ jobs:
           restore-keys: ${{ matrix.os }}-rubygems-
 
       - run: brew test-bot --only-cleanup-before
-
       - run: brew test-bot --only-setup
-
       - run: brew test-bot --only-tap-syntax
+
       - name: Base64-encode GITHUB_TOKEN for HOMEBREW_DOCKER_REGISTRY_TOKEN
         id: base64-encode
-        if: github.event_name == 'pull_request'
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           base64_token=$(echo -n "${TOKEN}" | base64 | tr -d "\n")
           echo "::add-mask::${base64_token}"
           echo "token=${base64_token}" >> "${GITHUB_OUTPUT}"
+          
       - run: brew test-bot --only-formulae --root-url=https://ghcr.io/v2/mad0x20wizard/test
         if: github.event_name == 'pull_request'
         env:
           HOMEBREW_DOCKER_REGISTRY_TOKEN: ${{ steps.base64-encode.outputs.token }}
 
       - name: Upload bottles as artifact
-        if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
