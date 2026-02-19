@@ -18,7 +18,7 @@ class TestSharp < Formula
   def install
     system "dotnet", "publish", "test-sharp.csproj",
             "-c", "Release",
-            "-r", determine_rid,
+            "-r", rid,
             "--self-contained",
             "-p:DebugSymbols=false",
             "-p:PublishSingleFile=true",
