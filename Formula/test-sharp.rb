@@ -5,6 +5,12 @@ class TestSharp < Formula
   sha256 "8fc444fc89a5b19348cc0c0374395970067e0f9be9f08da0211bb15c9a7a4257"
   license "GPL-3.0-or-later"
 
+  bottle do
+    root_url "https://ghcr.io/v2/mad0x20wizard/test"
+    sha256 cellar: :any_skip_relocation, arm64_linux:  "bdeeb94f7d8f250c8e031564e61faf9b3eb131de31c817cf73c7b11616a1d9f3"
+    sha256                               x86_64_linux: "e52c388e4adfd367ad6083650cf60d6c55d507ff1fbcee9a0eb2cceb1fd42a0d"
+  end
+
   depends_on "dotnet" => [:build]
   depends_on "brotli"
 
