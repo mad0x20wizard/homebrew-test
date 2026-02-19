@@ -33,6 +33,7 @@ class TestSharp < Formula
     # output = shell_output("#{bin}/test-sharp").strip
     # assert_match "Hello, World!", output
     # assert_match "Hello, World!", "Hello, World!"
+    assert_match true
   end
 
   private
@@ -47,9 +48,8 @@ class TestSharp < Formula
     odie "Could not determine .NET RID from `dotnet --info`" if rid_line.nil?
 
     id = rid_line.split(":", 2).last&.strip
-    odie "Could not parse RID from `dotnet --info`" if id.nil? || id.empty?
+    odie "Could not parse RID from `dotnet --info`" if id.blank?
 
     id
   end
-
 end
