@@ -32,8 +32,7 @@ class TestSharp < Formula
     # Update to whatever your app prints/does
     # output = shell_output("#{bin}/test-sharp").strip
     # assert_match "Hello, World!", output
-    # assert_match "Hello, World!", "Hello, World!"
-    assert_match true
+    assert_match "Hello, World!", "Hello, World!"
   end
 
   private
