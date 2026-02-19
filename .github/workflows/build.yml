@@ -51,7 +51,7 @@ jobs:
             --only-formulae \
             --skip-online-checks \
             --skip-dependents \
-            --root-url=https://ghcr.io/v2/${{ secrets.TAP_NAME }}
+            --root-url=https://ghcr.io/v2/${{ vars.TAP_NAME }}
 
       - name: Upload bottles as artifact
         uses: actions/upload-artifact@v4
