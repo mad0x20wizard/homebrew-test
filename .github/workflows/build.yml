@@ -4,128 +4,71 @@ on:
   pull_request:
 
 jobs:
-  test-bot:
-    strategy:
-      matrix:
-        os:
-          # - macos-15            # Sequoia
-          # - macos-26            # Tahoe
-          # - ubuntu-24.04-arm    # Linux arm64
-          - ubuntu-24.04        # Linux x86_64
+  # test-bot:
+  #   strategy:
+  #     matrix:
+  #       os:
+  #         # - macos-15            # Sequoia
+  #         # - macos-26            # Tahoe
+  #         # - ubuntu-24.04-arm    # Linux arm64
+  #         - ubuntu-24.04        # Linux x86_64
 
-    runs-on: ${{ matrix.os }}
-
-    permissions:
-      actions: read
-      checks: read
-      contents: read
-      packages: read
-      pull-requests: read
-
-    steps:
-
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-        
-      - name: Fix ruby gems directory permissions
-        run: |
-          # Fix ownership first so current user can write, then remove world-writable
-          BUNDLE_DIR="$(brew --prefix)/Homebrew/Library/Homebrew/vendor/bundle/ruby"
-          if [ -d "${BUNDLE_DIR}" ]; then
-            # Take ownership so we can write to it
-            sudo chown -R "$(whoami):$(id -gn)" "${BUNDLE_DIR}"
-            # Remove world-writable permissions to satisfy Bundler security
-            chmod -R o-w "${BUNDLE_DIR}"
-            echo "Fixed ownership and permissions for ${BUNDLE_DIR}"
-          fi
-
-      - run: brew test-bot --only-cleanup-before
-      - run: brew test-bot --only-setup
-      - run: brew test-bot --only-tap-syntax
-
-      - run: |
-          brew test-bot \
-            --only-formulae \
-            --skip-online-checks \
-            --skip-dependents \
-            --root-url=https://ghcr.io/v2/mad0x20wizard/test
-
-      - name: Upload bottles as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: bottles_${{ matrix.os }}
-          path: '*.bottle.*'
-
-  pr-pull:
-    # if: contains(github.event.pull_request.labels.*.name, 'pr-pull')
-
-    needs: test-bot
-
-    runs-on: ubuntu-24.04
-
-    permissions:
-      actions: read
-      contents: write
-      packages: write
-      pull-requests: write
-
-      # really needed?
-      issues: read
-      checks: read
-      
-    steps:
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up git
-        uses: Homebrew/actions/git-user-config@main
-
-      - name: Pull bottles
-        env:
-          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_GITHUB_PACKAGES_USER: ${{ github.repository_owner }}
-          PULL_REQUEST: ${{ github.event.pull_request.number }}
-
-        run: |
-          brew pr-pull \
-            --debug \
-            --no-cherry-pick \
-            --tap="$GITHUB_REPOSITORY" \
-            --workflows="build.yml" \
-            "$PULL_REQUEST"
-
-      - name: Push commits
-        uses: Homebrew/actions/git-try-push@main
-        with:
-          branch: main
-
-      # - name: Delete branch
-      #   env:
-      #     BRANCH: ${{ github.event.pull_request.head.ref }}
-      #   run: git push --delete origin "$BRANCH"
-
-  # add-pr-pull:
-  #   needs: test-bot
-  #   runs-on: ubuntu-slim
+  #   runs-on: ${{ matrix.os }}
 
   #   permissions:
-  #     pull-requests: write
+  #     actions: read
+  #     checks: read
+  #     contents: read
+  #     packages: read
+  #     pull-requests: read
 
   #   steps:
-  #     - name: Add 'pr-pull' label
-  #       uses: actions/github-script@v7
+
+  #     - name: Set up Homebrew
+  #       id: set-up-homebrew
+  #       uses: Homebrew/actions/setup-homebrew@main
   #       with:
-  #         script: |
-  #           await github.rest.issues.addLabels({
-  #             owner: context.repo.owner,
-  #             repo: context.repo.repo,
-  #             issue_number: context.payload.pull_request.number,
-  #             labels: ["pr-pull"]
-  #           })
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+        
+  #     - name: Fix ruby gems directory permissions
+  #       run: |
+  #         # Fix ownership first so current user can write, then remove world-writable
+  #         BUNDLE_DIR="$(brew --prefix)/Homebrew/Library/Homebrew/vendor/bundle/ruby"
+  #         if [ -d "${BUNDLE_DIR}" ]; then
+  #           # Take ownership so we can write to it
+  #           sudo chown -R "$(whoami):$(id -gn)" "${BUNDLE_DIR}"
+  #           # Remove world-writable permissions to satisfy Bundler security
+  #           chmod -R o-w "${BUNDLE_DIR}"
+  #           echo "Fixed ownership and permissions for ${BUNDLE_DIR}"
+  #         fi
+
+  #     - run: brew test-bot --only-cleanup-before
+  #     - run: brew test-bot --only-setup
+  #     - run: brew test-bot --only-tap-syntax
+
+  #     - run: |
+  #         brew test-bot \
+  #           --only-formulae \
+  #           --skip-online-checks \
+  #           --skip-dependents \
+  #           --root-url=https://ghcr.io/v2/mad0x20wizard/test
+
+  #     - name: Upload bottles as artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         if-no-files-found: error
+  #         name: bottles_${{ matrix.os }}
+  #         path: '*.bottle.*'
+
+  add-pr-pull:
+    # needs: test-bot
+    runs-on: ubuntu-slim
+
+    steps:
+      - name: Add 'pr-pull' label
+        env:
+          GH_TOKEN: ${{ secrets.TAP_PAT }}
+          PR_URL: "${{ github.event.pull_request.html_url }}"
+          
+        run: |
+          gh pr edit "$PR_URL" --add-label "pr-pull"
