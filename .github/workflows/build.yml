@@ -63,6 +63,8 @@ jobs:
   pr-pull:
     # if: contains(github.event.pull_request.labels.*.name, 'pr-pull')
 
+    needs: test-bot
+
     runs-on: ubuntu-24.04
 
     permissions:
@@ -94,6 +96,7 @@ jobs:
         run: |
           brew pr-pull \
             --debug \
+            --no-cherry-pick \
             --tap="$GITHUB_REPOSITORY" \
             --workflows="build.yml" \
             "$PULL_REQUEST"
