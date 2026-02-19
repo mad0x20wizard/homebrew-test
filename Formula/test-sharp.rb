@@ -47,7 +47,7 @@ class TestSharp < Formula
     odie "Could not determine .NET RID from `dotnet --info`" if rid_line.nil?
 
     id = rid_line.split(":", 2).last&.strip
-    odie "Could not parse RID from `dotnet --info`" if rid.nil? || rid.empty?
+    odie "Could not parse RID from `dotnet --info`" if id.nil? || id.empty?
 
     id
   end
