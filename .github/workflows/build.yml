@@ -3,9 +3,6 @@ name: Build Homebrew bottles
 on:
   pull_request:
 
-env:
-  TAP_NAME: ${{ vars.TAP_NAME }}
-
 jobs:
   test-bot:
     strategy:
@@ -54,7 +51,7 @@ jobs:
             --only-formulae \
             --skip-online-checks \
             --skip-dependents \
-            --root-url="https://ghcr.io/v2/${TAP_NAME}"
+            --root-url="https://ghcr.io/v2/${GITHUB_REPOSITORY/homebrew-/}"
 
       - name: Upload bottles as artifact
         uses: actions/upload-artifact@v4
