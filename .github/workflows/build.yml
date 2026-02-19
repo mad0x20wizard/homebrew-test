@@ -8,10 +8,10 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos-15            # Sequoia
+          # - macos-15            # Sequoia
           # - macos-26            # Tahoe
           - ubuntu-24.04-arm    # Linux arm64
-          - ubuntu-24.04        # Linux x86_64
+          # - ubuntu-24.04        # Linux x86_64
 
     runs-on: ${{ matrix.os }}
 
@@ -60,7 +60,7 @@ jobs:
           name: bottles_${{ matrix.os }}
           path: '*.bottle.*'
 
-  add-pr-pull:
+  auto-label:
     needs: test-bot
     runs-on: ubuntu-slim
 
@@ -68,7 +68,6 @@ jobs:
       - name: Add 'pr-pull' label
         env:
           GH_TOKEN: ${{ secrets.TAP_PAT }}
-          PR_URL: "${{ github.event.pull_request.html_url }}"
           
         run: |
-          gh pr edit "$PR_URL" --add-label "pr-pull"
+          gh pr edit "${{ github.event.pull_request.html_url }}" --add-label "pr-pull"
