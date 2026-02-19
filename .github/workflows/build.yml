@@ -60,7 +60,7 @@ jobs:
           name: bottles_${{ matrix.os }}
           path: '*.bottle.*'
 
-  auto-label:
+  publish:
     needs: test-bot
     runs-on: ubuntu-slim
 
